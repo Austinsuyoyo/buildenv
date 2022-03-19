@@ -6,7 +6,7 @@ A tool for quickly setup buildroot enviroment, support buildroot command `make g
 OS
 - Ubuntu(16.04/18.04/20.04)
 - Arch 
-- WSL
+- WSL (auto remove windows PATH or add `appendWindowsPath = false` in wsl.conf)
 
 Shell
 - bash
@@ -24,4 +24,4 @@ bash <(curl -s https://raw.githubusercontent.com/Austinsuyoyo/buildenv/main/buil
 ```
 
 ## Demo
-[![asciicast](https://asciinema.org/a/478431.svg)](https://asciinema.org/a/478431)
+[![asciicast](https://asciinema.org/a/478446.svg)](https://asciinema.org/a/478446)
