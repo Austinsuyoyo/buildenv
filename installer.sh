@@ -318,6 +318,8 @@ if [ $ARG_RUN_INSTALL_PYTHON = 1 ]; then
             echo 'eval "$(pyenv init -)"' >> ~/.zshrc
             ;;
         *)
+            echo -e "${RED}  ❌  not support $SETUP_SHELL shell. ${END}"
+            do_exit
             ;;
     esac
     # Refresh PATH enviroment
@@ -344,7 +346,7 @@ if [ $? -eq 0 ]; then
         
         case $SETUP_SHELL in
             "bash")
-                CONFIG_PATH='$HOME/.profile'
+                CONFIG_PATH=$HOME/.profile
                 # Make sure all Shell config files exist
                 touch "$CONFIG_PATH"
                 grep "export PATH=\$(/usr/bin/printenv PATH | /usr/bin/perl -ne 'print join(\":\", grep { \!/\\\\/mnt\\\\/\[a-z]/ } split(/:/));')" "$CONFIG_PATH" >/dev/null
@@ -359,9 +361,23 @@ if [ $? -eq 0 ]; then
                 fi
                 ;;
             "zsh")
-
+                CONFIG_PATH=$HOME/.zprofile
+                # Make sure all Shell config files exist
+                touch "$CONFIG_PATH"
+                grep "export PATH=\$(/usr/bin/printenv PATH | /usr/bin/perl -ne 'print join(\":\", grep { \!/\\\\/mnt\\\\/\[a-z]/ } split(/:/));')" "$CONFIG_PATH" >/dev/null
+                if [ $? -eq 0 ]; then
+                    echo -e "${GREEN}  ✅  Fix script already done in "$CONFIG_PATH" ${END}"
+                else
+                    echo -e "${RED}  ❌  Fix script not installed in "$CONFIG_PATH", running setup...${END}"
+                    echo "" >> "$CONFIG_PATH"
+                    echo "# Fix Windows PATH problem" >> "$CONFIG_PATH"
+                    echo -e "export PATH=\$(/usr/bin/printenv PATH | /usr/bin/perl -ne 'print join(\":\", grep { \041/\\\/mnt\\\/[a-z]/ } split(/:/));')" >> "$CONFIG_PATH"
+                    PRINT_WARNING_FLAG=1
+                fi
                 ;;
             *)
+                echo -e "${RED}  ❌  not support $SETUP_SHELL shell. ${END}"
+                do_exit
                 ;;
         esac
 
